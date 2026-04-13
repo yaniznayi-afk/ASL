@@ -16,7 +16,7 @@ body.light-mode .mode-btn.active { background-color: #333333; color: #ffffff; }
 
 .info-box { background-color: rgba(100, 180, 255, 0.15); padding: 15px; border-radius: 8px; }
 .info-box strong { color: #88ccff; display: block; margin-bottom: 8px; }
-.info-box p { color: #55aaff; font-size: 14px; margin-bottom: 5px; }
+.info-box p { color: #55aaff; font-size: 14px; margin-bottom: 5px; white-space: pre-line; }
 
 .error-box { display: none; background-color: var(--error-bg); color: var(--error-text); padding: 12px; border-radius: 4px; margin-bottom: 10px; text-align: center; font-weight: bold; font-size: 14px; }
 
