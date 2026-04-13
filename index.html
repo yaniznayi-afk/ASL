@@ -1,0 +1,184 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ASL Crypto Lab</title>
+    
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/modals.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+</head>
+<body>
+
+    <div class="fade-overlay" id="fadeOverlay"></div>
+
+    <div class="floating-menu-btn" id="menuBtn" onclick="toggleSettingsMenu(event)">
+        <div class="hamburger-line line1"></div>
+        <div class="hamburger-line line2"></div>
+        <div class="hamburger-line line3"></div>
+    </div>
+    <div class="settings-menu" id="settingsMenu">
+        <button class="settings-btn active-theme" id="darkThemeBtn" onclick="changeTheme('dark')">Тёмная</button>
+        <button class="settings-btn" id="lightThemeBtn" onclick="changeTheme('light')">Светлая</button>
+        <div class="menu-separator"></div>
+        <button class="settings-btn" id="appModeBtn" onclick="applyTransition(toggleAppMode)">Режим пароля</button>
+        <div class="menu-separator"></div>
+        <button class="settings-btn" onclick="openInfoModal()">Информация</button>
+        <button class="settings-btn" onclick="openDownloadModal()">Скачать локально</button>
+    </div>
+
+    <div class="modal-overlay" id="catModal" onclick="closeCatModal(event)">
+        <div class="category-list" id="catList"></div>
+    </div>
+
+    <div class="info-modal" id="infoModal">
+        <div class="info-header">
+            <div class="info-top-row">
+                <div class="info-close" onclick="closeInfoModal()">&#x2715;</div>
+            </div>
+            <div class="info-tabs">
+                <button class="info-tab" id="tab_ciphers" onclick="switchInfoTab('ciphers')">Шифры</button>
+                <button class="info-tab" id="tab_auto" onclick="switchInfoTab('auto')">Пароли (Авто)</button>
+                <button class="info-tab" id="tab_manual" onclick="switchInfoTab('manual')">Пароли (Ручной)</button>
+            </div>
+        </div>
+        <div class="info-content" id="infoModalContent">
+        </div>
+        <div class="scroll-top-btn" id="scrollTopBtn" onclick="scrollToTopInfo()">
+            <img class="img-dark" src="https://i.postimg.cc/02SMpLYH/Untitled180-20260412155920.png" alt="Up">
+            <img class="img-light" src="https://i.postimg.cc/gk3qHM8s/Untitled180-20260412160107.png" alt="Up">
+        </div>
+    </div>
+
+    <div class="info-modal" id="downloadModal">
+        <div class="info-header" style="border-bottom: none; padding-bottom: 0; background-color: transparent;">
+            <div class="info-top-row">
+                <div class="info-close" onclick="closeDownloadModal()">&#x2715;</div>
+            </div>
+        </div>
+        <div class="info-content" style="padding-top: 0;">
+            <div style="text-align: center; margin-bottom: 20px;">
+                <span style="font-size: 22px; font-weight: bold; border-bottom: 2px solid var(--border-color); padding-bottom: 5px; color: var(--on-secondary);">Инструкция</span>
+            </div>
+            
+            <div style="color: var(--on-secondary); font-size: 16px; line-height: 1.6; max-width: 600px; margin: 0 auto;">
+                1. Вы получите файл .json<br>
+                2. Переименуйте файл в .html<br>
+                3. Откройте файл в браузере(нажав на него).
+            </div>
+            
+            <div class="info-full-separator" style="max-width: 600px; margin: 30px auto;"></div>
+            
+            <div class="download-layout">
+                <div class="info-box download-info">
+                    <strong>Информация</strong>
+                    <p>• Данное окно позволяет скачать ASL на устройство.</p>
+                    <p>• После установки ASL никак не будет пересекаться с интернетом, работая полностью локально.</p>
+                    <p>• Открытый код(кроме Krul).</p>
+                    <p>• Krul будет обфусцирован.</p>
+                    <p>• Вес файла 132.7k~</p>
+                    <p>• Работает без интернета.</p>
+                </div>
+                <button class="action-btn download-btn" id="downloadActionBtn" onclick="downloadAppLocally()">Скачать</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container" onclick="closeDropdowns(event)">
+        <div class="header">
+            <h1>ASL</h1>
+            <p id="headerSubtitle">Шифрование и дешифрование с использованием AES-256-GCM</p>
+        </div>
+
+        <div class="content">
+            <div class="mode-toggle">
+                <button class="mode-btn active" id="btnLeft" onclick="setOpMode('left')">Зашифровать</button>
+                <button class="mode-btn" id="btnRight" onclick="setOpMode('right')">Дешифровать</button>
+            </div>
+
+            <div class="cipher-select-wrapper" id="cryptoSelector">
+                <button class="cipher-main-btn" id="cipherMainBtn" onclick="toggleDropdown(event, 'cipherDropdown')">AES</button>
+                <div class="cipher-dropdown" id="cipherDropdown">
+                    <div class="cipher-option" onclick="setSelection('crypto', 'Атбаш')">Атбаш</div>
+                    <div class="cipher-option" onclick="setSelection('crypto', 'Цезарь')">Цезарь</div>
+                    <div class="cipher-option" onclick="setSelection('crypto', 'Виженера')">Виженера</div>
+                    <div class="cipher-option" onclick="setSelection('crypto', 'DES')">DES</div>
+                    <div class="cipher-option active" onclick="setSelection('crypto', 'AES')">AES</div>
+                    <div class="separator-line"></div>
+                    <div class="cipher-option" onclick="setSelection('crypto', 'Двоичный')">Двоичный</div>
+                    <div class="cipher-option" onclick="setSelection('crypto', 'Азбука Морзе')">Азбука Морзе</div>
+                </div>
+            </div>
+
+            <div class="cipher-select-wrapper d-none" id="passAutoSelector">
+                <button class="cipher-main-btn" id="passMainBtn" onclick="toggleDropdown(event, 'passDropdown')">Argon2 (Симуляция)</button>
+                <div class="cipher-dropdown" id="passDropdown">
+                    <div class="cipher-option active" onclick="setSelection('pass', 'Argon2 (Симуляция)')">Argon2 (Симуляция)</div>
+                    <div class="cipher-option" onclick="setSelection('pass', 'PBKDF2-HMAC')">PBKDF2-HMAC</div>
+                    <div class="cipher-option" onclick="setSelection('pass', 'AES-GCM-KDF')">AES-GCM-KDF</div>
+                    <div class="cipher-option" onclick="setSelection('pass', 'SHA3-512 Hash')">SHA3-512 Hash</div>
+                    <div class="cipher-option" onclick="setSelection('pass', 'Bcrypt (Симуляция)')">Bcrypt (Симуляция)</div>
+                    <div class="separator-line"></div>
+                    <div class="cipher-option" onclick="setSelection('pass', 'Math.random (Fast)')">Math.random (Fast)</div>
+                    <div class="cipher-option" onclick="setSelection('pass', 'Time-Based Seed')">Time-Based Seed</div>
+                </div>
+            </div>
+
+            <div class="input-group d-none" id="passManualSelector">
+                <label>Количество элементов (1-10):</label>
+                <input type="number" id="manualCount" min="1" max="10" value="1" oninput="buildManualGrid()">
+            </div>
+
+            <div class="info-box" id="infoBox">
+                <strong>Информация</strong>
+                <p>• Все операции выполняются локально в браузере</p>
+                <p id="infoDesc">• Используется современный стандарт шифрования AES с длиной ключа 256 бит в режиме GCM</p>
+            </div>
+
+            <div class="error-box" id="errorBox">Ошибка</div>
+
+            <div class="input-group" id="cryptoInputGroup">
+                <label>Текст:</label>
+                <textarea id="mainText" placeholder="Введите текст для шифрования или дешифрования..." oninput="hideError()"></textarea>
+            </div>
+            
+            <div class="dynamic-inputs" id="cryptoDynamicInputs"></div>
+
+            <div class="input-group d-none" id="passwordOutputGroup">
+                <label>Пароль без особых знаков:</label>
+                <textarea id="passNormal" readonly placeholder="Здесь появится пароль..."></textarea>
+                <br>
+                <label>Пароль с особыми знаками:</label>
+                <textarea id="passSpecial" readonly placeholder="Здесь появится пароль..."></textarea>
+            </div>
+
+            <div class="manual-grid d-none" id="manualGrid"></div>
+
+            <div>
+                <button class="action-btn copy-btn" id="copyBtn" onclick="copyResults()">Скопировать</button>
+                <button class="action-btn file-btn" id="fileBtn" onclick="createFile()">Создать файл</button>
+                <button class="action-btn" id="actionBtn" onclick="processAction()" style="margin-top: 10px;">Зашифровать</button>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>Advanced Security Lab</p>
+            <span>© 2026 ASL</span>
+        </div>
+    </div>
+
+    <script src="js/state.js"></script>
+    <script src="js/data.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/modals.js"></script>
+    <script src="js/crypto.js"></script>
+    <script src="js/password.js"></script>
+    <script src="js/download.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
