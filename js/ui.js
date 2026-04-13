@@ -98,7 +98,7 @@ function updatePasswordModeUI() {
         document.getElementById('passAutoSelector').classList.add('d-none');
         document.getElementById('passManualSelector').classList.remove('d-none');
         document.getElementById('manualGrid').classList.remove('d-none');
-        document.getElementById('infoDesc').innerText = '• Порядок выбранных элементов и стиль текста не влияет на конечный результат; \n\n• Рекомендуется от 3-х элементов (для длинных слов допускается меньше)';
+        document.getElementById('infoDesc').innerText = '• Порядок выбранных элементов и стиль текста не влияет на конечный результат; \n• Рекомендуется от 3-х элементов (для длинных слов допускается меньше)';
         buildManualGrid();
     }
 }
