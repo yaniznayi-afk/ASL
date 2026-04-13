@@ -1,0 +1,19 @@
+﻿:root {
+    --bg-color: #121212;
+    --surface-color: #1e1e1e;
+    --secondary-color: #222222;
+    --on-secondary: #f0f0f0;
+    --border-color: #555555;
+    --error-bg: rgba(255, 80, 80, 0.2);
+    --error-text: #ff8888;
+}
+
+body.light-mode {
+    --bg-color: #ffffff;
+    --surface-color: #ffffff;
+    --secondary-color: #f0f0f0;
+    --on-secondary: #333333;
+    --border-color: #cccccc;
+    --error-bg: rgba(255, 0, 0, 0.1);
+    --error-text: #cc0000;
+}
