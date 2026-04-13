@@ -1,0 +1,21 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--on-secondary);
+    transition: background-color 0.3s, color 0.3s;
+    display: flex;
+    justify-content: center;
+}
+
+.d-none { display: none !important; }
+
+.img-dark, .img-light { display: none; }
+body:not(.light-mode) .img-dark { display: block; }
+body.light-mode .img-light { display: block; }
